@@ -1,0 +1,6 @@
+flask
+pydantic
+pymupdf
+langchain
+langchain-chroma
+langchain-ollama
