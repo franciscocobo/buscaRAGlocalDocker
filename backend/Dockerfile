@@ -1,31 +1,36 @@
-# Imagen base compatible con Mac Silicon
-FROM python:3.11-slim
+FROM python:3.9-slim
 
-# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copiar dependencias
-COPY requirements.txt .
-
-# Instalar dependencias
+# Install system dependencies required for PDF processing
 RUN apt-get update && apt-get install -y \
     build-essential \
-    gcc \
-    make \
-    cmake \
-    libmupdf-dev \
-    libglib2.0-dev \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    poppler-utils \
+    tesseract-ocr \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy requirements first to leverage Docker cache
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Create data directory
+RUN mkdir -p /app/data
+RUN mkdir -p /app/vectorstore
 
-
-# Copiar el código de la aplicación
+# Copy application code
 COPY . .
 
-# Exponer el puerto donde correrá Flask
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PORT=5001
+
+# Expose the port the app runs on
 EXPOSE 5001
 
-# Ejecutar la aplicación
+# Command to run the application
 CMD ["python", "app.py"]

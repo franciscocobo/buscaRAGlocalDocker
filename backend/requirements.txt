@@ -1,6 +1,15 @@
 flask
 pydantic
-pymupdf
 langchain
 langchain-chroma
 langchain-ollama
+langchain-community
+langchain-text-splitters
+langchain-core
+chromadb
+python-dotenv
+pypdf
+pdf2image
+pillow
+pytesseract
+unstructured[pdf]

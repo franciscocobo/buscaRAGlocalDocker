@@ -1,21 +1,18 @@
-# Imagen base compatible con Mac Silicon
-FROM python:3.11-slim
+# Usa una imagen base de Python
+FROM python:3.9-slim
 
-# Establecer el directorio de trabajo
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copiar dependencias
+# Copia el archivo de dependencias e instala las librerías
 COPY requirements.txt .
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Instalar dependencias
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copiar el código de la aplicación
+# Copia el resto del código del frontend
 COPY . .
 
-# Exponer el puerto donde correrá Flask
-EXPOSE 5001
+# Expone el puerto por defecto de Streamlit (8501)
+EXPOSE 8501
 
-# Ejecutar la aplicación
-CMD ["streamlit", "run", "app.py", "--server.port=5001"]
-
+# Comando para iniciar la aplicación de Streamlit
+CMD ["streamlit", "run", "app.py", "--server.port", "8501", "--server.address", "0.0.0.0"]

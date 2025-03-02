@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import json
+import os
 
 # Título de la aplicación
 st.title("AI Chatbot")
@@ -15,6 +16,8 @@ for message in st.session_state.messages:
         st.write(message["content"])
 
 # Definir la URL del endpoint de la API (debe reemplazarse con la URL real)
+#rag_api_host = os.environ.get("RAG_API_HOST", "host.docker.internal")
+#API_URL = f"http://{rag_api_host}:5001/query"
 API_URL = "http://127.0.0.1:5001/query"
 
 # Entrada de chat para que el usuario escriba su pregunta
