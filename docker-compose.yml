@@ -1,15 +1,27 @@
 services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./:/frontend
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
   backend:
-    build: .
+    build: ./backend
     ports:
       - "5001:5001"
     volumes:
-      - ./:/app
+      - ./:/backend
     environment:
       - PORT=5001
       - OLLAMA_HOST=ollama
+    restart: on-failure
     depends_on:
       - ollama
+
   # Ollama service for LLM access
   ollama:
     image: ollama/ollama:latest
@@ -17,7 +29,9 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
+      - ./entrypoint.sh:/entrypoint.sh
     restart: unless-stopped
+    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
 
 volumes:
   ollama_data: 
